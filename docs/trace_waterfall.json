@@ -1,29 +1,126 @@
 [
   {
     "step": 1,
-    "query": "Chào bạn, bạn có thể giới thiệu quy chế học vụ cơ bản của Đại học VinUni không?",
+    "query": "Chào bạn, bạn có thể cho tôi biết chính sách bảo hành pin và chu kỳ bảo dưỡng định kỳ tiêu chuẩn của xe điện VinFast không?",
     "action_type": "FINAL_ANSWER",
-    "thought": "Câu hỏi chung về quy chế học vụ, trả lời trực tiếp không cần gọi Tool.",
-    "output": "[Mock Agent Response]: Xin chào! Quy chế học vụ VinUni yêu cầu sinh viên tích lũy tối thiểu 120 tín chỉ và duy trì GPA trên 2.0 để tốt nghiệp.",
-    "latency_ms": 2845.93
+    "thought": "Gemini phản hồi trực tiếp bằng văn bản (không cần gọi công cụ).",
+    "output": "Chào bạn! Dưới đây là thông tin chi tiết về **chính sách bảo hành pin** và **chu kỳ bảo dưỡng định kỳ** tiêu chuẩn dành cho ô tô điện VinFast:\n\n---\n\n### 1. Chính sách bảo hành Pin & Xe điện VinFast\n\nVinFast áp dụng chính sách bảo hành thuộc hàng tốt nhất thị trường hiện nay:\n\n* **Thời gian bảo hành xe:**\n  * **VF 8, VF 9:** **10 năm** hoặc **200.000 km** (tùy điều kiện nào đến trước).\n  * **VF e34, VF 5, VF 6, VF 7:** **7 - 10 năm** hoặc **160.000 - 200.000 km** (tùy dòng xe và thời điểm).\n  * **VF 3:** **7 năm** hoặc **160.000 km** (tùy điều kiện nào đến trước).\n\n* **Chính sách bảo hành Pin (Đối với khách hàng mua pin hoặc thuê pin):**\n  * **Pin cao áp:** Bảo hành **10 năm không giới hạn số km** (dành cho VF 8, VF 9) hoặc **7 - 10 năm / 160.000 - 200.000 km** (tùy dòng xe).\n  * **Tình trạng sức khỏe pin (SoH):** VinFast cam kết thay thế hoặc sửa chữa miễn phí nếu dung lượng tối đa của pin (SoH) giảm xuống **dưới 70%** trong thời hạn bảo hành.\n\n---\n\n### 2. Chu kỳ bảo dưỡng định kỳ tiêu chuẩn\n\nXe điện có ít chi tiết cơ khí chuyển động hơn xe xăng (không cần thay dầu động cơ, lọc dầu, bugi...), vì vậy chi phí và tần suất bảo dưỡng tối ưu hơn rất nhiều.\n\n* **Chu kỳ bảo dưỡng định kỳ:** **12.000 km** hoặc **12 tháng** (tùy điều kiện nào đến trước).\n* **Các mốc bảo dưỡng tiêu chuẩn:**\n  * **Mốc 12.000 km / 12 tháng:** Kiểm tra tổng quát hệ thống điện, pin cao áp, hệ thống phanh, đảo lốp, thay lọc gió điều hòa.\n  * **Mốc 24.000 km / 24 tháng:** Kiểm tra hệ thống treo, phanh, thay nước làm mát pin/động cơ (nếu cần theo tiêu chuẩn kỹ thuật).\n  * **Mốc 36.000 km / 48.000 km...:** Kiểm tra chuyên sâu bộ truyền động, dầu cầu/hộp số, nước làm mát và tình trạng pin.\n\n---\n\nNếu bạn cần kiểm tra tình trạng xe cụ thể (qua số VIN) hoặc muốn đặt lịch bảo dưỡng tại Xưởng dịch vụ VinFast gần nhất, hãy phản hồi lại cho mình biết nhé!",
+    "latency_ms": 8890.66
   },
   {
     "step": 1,
-    "query": "Hãy tra cứu thông tin học vụ của sinh viên SV2026001.",
+    "query": "Hãy tra cứu thông tin vận hành và lịch sử bảo dưỡng của xe VinFast có số VIN VF8-VN202601.",
     "action_type": "TOOL_EXECUTION",
-    "tool_name": "academic_query",
+    "tool_name": "vehicle_query",
     "arguments": {
-      "student_id": "SV2026001"
+      "vin": "VF8-VN202601"
     },
-    "observation": {},
-    "latency_ms": 799.12
+    "observation": {
+      "status": "SUCCESS",
+      "vin": "VF8-VN202601",
+      "data": {
+        "model": "VinFast VF8 Plus",
+        "owner": "Trần Van Bình",
+        "plate_number": "30K-882.49",
+        "odo_km": 12500,
+        "battery_soh": "96%",
+        "warning_lights": "Không có cảnh báo lỗi (Hệ thống bình thường)",
+        "maintenance_status": "Đã đến hạn bảo dưỡng cấp 1 (mốc 12.000 km)",
+        "preferred_service_center": "VinFast Smart City"
+      }
+    },
+    "latency_ms": 1737.88
   },
   {
     "step": 2,
-    "query": "Hãy tra cứu thông tin học vụ của sinh viên SV2026001.",
+    "query": "Hãy tra cứu thông tin vận hành và lịch sử bảo dưỡng của xe VinFast có số VIN VF8-VN202601.",
     "action_type": "FINAL_ANSWER",
     "thought": "Tổng hợp kết quả từ MCP Server thành công.",
-    "output": "Chưa thể trả lời chi tiết do chưa nhận được dữ liệu từ MCP Server (hãy hoàn thành TODO 2.1).",
+    "output": "Kết quả tra cứu cho xe VinFast VF8-VN202601 (VinFast VF8 Plus): Chủ sở hữu: Trần Van Bình, Biển số: 30K-882.49, Odo: 12500, SOH: 96%, Cảnh báo: Không có cảnh báo lỗi (Hệ thống bình thường), Bảo dưỡng: Đã đến hạn bảo dưỡng cấp 1 (mốc 12.000 km), Xưởng dịch vụ ưu tiên: VinFast Smart City.",
+    "latency_ms": 10.0
+  },
+  {
+    "step": 1,
+    "query": "Hãy đặt lịch bảo dưỡng định kỳ cho xe VinFast có số VIN VF8-VN202601 tại Xưởng dịch vụ VinFast Smart City vào lúc 09:00 ngày 20/09/2026.",
+    "action_type": "TOOL_EXECUTION",
+    "tool_name": "schedule_service",
+    "arguments": {
+      "service_center": "VinFast Smart City",
+      "vin": "VF8-VN202601",
+      "service_type": "Bảo dưỡng định kỳ",
+      "datetime_str": "09:00 20/09/2026"
+    },
+    "observation": {
+      "status": "SUCCESS",
+      "booking_id": "BK-VF-VF8-VN202601-2026",
+      "vin": "VF8-VN202601",
+      "service_center": "VinFast Smart City",
+      "datetime": "09:00 20/09/2026",
+      "service_type": "Bảo dưỡng định kỳ",
+      "message": "Đặt lịch thành công cho xe VF8-VN202601 (Bảo dưỡng định kỳ) tại VinFast Smart City vào lúc 09:00 20/09/2026."
+    },
+    "latency_ms": 2825.14
+  },
+  {
+    "step": 2,
+    "query": "Hãy đặt lịch bảo dưỡng định kỳ cho xe VinFast có số VIN VF8-VN202601 tại Xưởng dịch vụ VinFast Smart City vào lúc 09:00 ngày 20/09/2026.",
+    "action_type": "FINAL_ANSWER",
+    "thought": "Tổng hợp kết quả từ MCP Server thành công.",
+    "output": "Đặt lịch thành công cho xe VF8-VN202601 (Bảo dưỡng định kỳ) tại VinFast Smart City vào lúc 09:00 20/09/2026.",
+    "latency_ms": 10.0
+  },
+  {
+    "step": 1,
+    "query": "Xe của tôi có số VIN VF8-VN202601. Hãy kiểm tra tình trạng số km (ODO) và các cảnh báo lỗi hiện tại của xe, sau đó đặt lịch hẹn bảo dưỡng phù hợp tại Xưởng dịch vụ VinFast Ocean Park vào lúc 14:30 ngày 22/09/2026.",
+    "action_type": "TOOL_EXECUTION",
+    "tool_name": "vehicle_query",
+    "arguments": {
+      "vin": "VF8-VN202601"
+    },
+    "observation": {
+      "status": "SUCCESS",
+      "vin": "VF8-VN202601",
+      "data": {
+        "model": "VinFast VF8 Plus",
+        "owner": "Trần Van Bình",
+        "plate_number": "30K-882.49",
+        "odo_km": 12500,
+        "battery_soh": "96%",
+        "warning_lights": "Không có cảnh báo lỗi (Hệ thống bình thường)",
+        "maintenance_status": "Đã đến hạn bảo dưỡng cấp 1 (mốc 12.000 km)",
+        "preferred_service_center": "VinFast Smart City"
+      }
+    },
+    "latency_ms": 2163.07
+  },
+  {
+    "step": 2,
+    "query": "Xe của tôi có số VIN VF8-VN202601. Hãy kiểm tra tình trạng số km (ODO) và các cảnh báo lỗi hiện tại của xe, sau đó đặt lịch hẹn bảo dưỡng phù hợp tại Xưởng dịch vụ VinFast Ocean Park vào lúc 14:30 ngày 22/09/2026.",
+    "action_type": "FINAL_ANSWER",
+    "thought": "Tổng hợp kết quả từ MCP Server thành công.",
+    "output": "Kết quả tra cứu cho xe VinFast VF8-VN202601 (VinFast VF8 Plus): Chủ sở hữu: Trần Van Bình, Biển số: 30K-882.49, Odo: 12500, SOH: 96%, Cảnh báo: Không có cảnh báo lỗi (Hệ thống bình thường), Bảo dưỡng: Đã đến hạn bảo dưỡng cấp 1 (mốc 12.000 km), Xưởng dịch vụ ưu tiên: VinFast Smart City.",
+    "latency_ms": 10.0
+  },
+  {
+    "step": 1,
+    "query": "Hãy tra cứu thông tin bảo dưỡng và tình trạng pin của xe VinFast có số VIN không tồn tại VIN99999999.",
+    "action_type": "TOOL_EXECUTION",
+    "tool_name": "vehicle_query",
+    "arguments": {
+      "vin": "VIN99999999"
+    },
+    "observation": {
+      "status": "NOT_FOUND",
+      "message": "Không tìm thấy dữ liệu xe có số VIN 'VIN99999999' trong hệ thống VinFast."
+    },
+    "latency_ms": 1877.49
+  },
+  {
+    "step": 2,
+    "query": "Hãy tra cứu thông tin bảo dưỡng và tình trạng pin của xe VinFast có số VIN không tồn tại VIN99999999.",
+    "action_type": "FINAL_ANSWER",
+    "thought": "Tổng hợp kết quả từ MCP Server thành công.",
+    "output": "Không tìm thấy dữ liệu xe có số VIN 'VIN99999999' trong hệ thống VinFast.",
     "latency_ms": 10.0
   }
 ]

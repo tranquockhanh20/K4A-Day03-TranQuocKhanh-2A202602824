@@ -122,16 +122,18 @@ def run_react_agent(user_query: str, provider, mcp_server: MCPAcademicServer) ->
                     if "data" in obs_data:
                         d = obs_data["data"]
                         final_answer = (
-                            f"Kết quả tra cứu cho sinh viên {obs_data.get('student_id', '')} ({d.get('full_name', '')}): "
-                            f"Lớp {d.get('class', '')}, GPA: {d.get('gpa', '')}, Email: {d.get('email', '')}, "
-                            f"Trạng thái: {d.get('status', '')}, Cố vấn: {d.get('advisor', '')}."
+                            f"Kết quả tra cứu cho xe VinFast {obs_data.get('vin', '')} ({d.get('model', '')}): "
+                            f"Chủ sở hữu: {d.get('owner', '')}, Biển số: {d.get('plate_number', '')}, "
+                            f"Odo: {d.get('odo_km', '')}, SOH: {d.get('battery_soh', '')}, "
+                            f"Cảnh báo: {d.get('warning_lights', '')}, Bảo dưỡng: {d.get('maintenance_status', '')}, "
+                            f"Xưởng dịch vụ ưu tiên: {d.get('preferred_service_center', '')}."
                         )
                     elif "message" in obs_data:
                         final_answer = obs_data["message"]
                     else:
                         final_answer = f"Đã hoàn tất xử lý qua MCP Server: {json.dumps(obs_data, ensure_ascii=False)}"
                 elif obs_data.get("status") == "NOT_FOUND":
-                    final_answer = obs_data.get("message", "Không tìm thấy thông tin sinh viên yêu cầu.")
+                    final_answer = obs_data.get("message", "Không tìm thấy dữ liệu xe VinFast yêu cầu.")
                 else:
                     final_answer = f"Phản hồi từ công cụ: {json.dumps(obs_data, ensure_ascii=False)}"
             
@@ -177,15 +179,13 @@ if __name__ == "__main__":
     print(f"✅ Đã tải thành công {len(tests)} Test Cases thử nghiệm.\n")
     
     if "--interactive" in sys.argv:
-        print("🎮 [INTERACTIVE MODE] Trò chuyện trực tiếp với ReAct Agent:")
         print("💡 Gợi ý câu hỏi thử nghiệm:")
-        print("   - Câu hỏi chung: 'Quy chế học vụ VinUni yêu cầu bao nhiêu tín chỉ?'")
-        print("   - Tra cứu học vụ: 'Hãy tra cứu thông tin học vụ của sinh viên SV2026001'")
-        print("   - Đặt lịch hẹn: 'Đặt lịch hẹn tư vấn cho SV2026001 vào 14:00 ngày 15/09/2026'")
-        print("   - Gõ 'exit' hoặc 'quit' để kết thúc phiên trò chuyện.\n")
+        print("- Câu hỏi chung: 'Chính sách bảo hành pin xe điện VinFast như thế nào?'")
+        print("- Tra cứu xe: 'Hãy tra cứu thông tin xe có số VIN VF8-VN202601'")
+        print("- Đặt lịch hẹn: 'Đặt lịch bảo dưỡng cho xe VF8-VN202601 tại VinFast Smart City vào 09:00 ngày 20/09/2026'")
         while True:
             try:
-                user_input = input("👤 Sinh viên hỏi: ").strip()
+                user_input = input("👤Người dùng hỏi: ").strip()
                 if not user_input or user_input.lower() in ["exit", "quit"]:
                     print("👋 Tạm biệt! Kết thúc phiên trò chuyện.")
                     break

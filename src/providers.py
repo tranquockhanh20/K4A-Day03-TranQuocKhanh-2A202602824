@@ -37,27 +37,40 @@ class MockOfflineProvider(BaseLLMProvider):
     def generate_with_tools(self, prompt: str, tools_schema: List[Dict[str, Any]], system_prompt: str = "") -> Dict[str, Any]:
         prompt_lower = prompt.lower()
         
-        # Mô phỏng nhận diện intent gọi Tool
-        if "sv2026001" in prompt_lower and "đặt lịch" in prompt_lower:
+        # Mô phỏng nhận diện intent gọi Tool cho VinFast EV Service
+        if "vin99999999" in prompt_lower:
             return {
                 "type": "tool_call",
-                "tool_name": "schedule_appointment",
-                "arguments": {"student_id": "SV2026001", "datetime_str": "14:00 15/09/2026", "advisor_name": "PGS.TS Nguyễn Văn A"},
-                "thought": "Người dùng yêu cầu đặt lịch hẹn tư vấn cho sinh viên SV2026001. Tôi sẽ gọi tool schedule_appointment."
+                "tool_name": "vehicle_query",
+                "arguments": {"vin": "VIN99999999"},
+                "thought": "Người dùng yêu cầu tra cứu số VIN không tồn tại VIN99999999. Tôi sẽ gọi tool vehicle_query để kiểm tra."
             }
-        elif "sv2026001" in prompt_lower or "tra cứu" in prompt_lower:
+        elif "đặt lịch" in prompt_lower:
             return {
                 "type": "tool_call",
-                "tool_name": "academic_query",
-                "arguments": {"student_id": "SV2026001"},
-                "thought": "Người dùng muốn tra cứu thông tin học vụ của sinh viên SV2026001. Tôi sẽ gọi tool academic_query."
+                "tool_name": "schedule_service",
+                "arguments": {
+                    "vin": "VF8-VN202601",
+                    "service_center": "VinFast Ocean Park" if "ocean park" in prompt_lower else "VinFast Smart City",
+                    "datetime_str": "14:30 22/09/2026" if "22/09" in prompt_lower else "09:00 20/09/2026",
+                    "service_type": "Bảo dưỡng định kỳ"
+                },
+                "thought": "Người dùng yêu cầu đặt lịch dịch vụ bảo dưỡng cho xe. Tôi sẽ gọi tool schedule_service."
+            }
+        elif "vf8" in prompt_lower or "tra cứu" in prompt_lower or "xe" in prompt_lower:
+            return {
+                "type": "tool_call",
+                "tool_name": "vehicle_query",
+                "arguments": {"vin": "VF8-VN202601"},
+                "thought": "Người dùng muốn tra cứu tình trạng vận hành và bảo dưỡng của xe VF8-VN202601. Tôi sẽ gọi tool vehicle_query."
             }
         else:
             return {
                 "type": "text",
-                "content": f"[Mock Agent Response]: Xin chào! Quy chế học vụ VinUni yêu cầu sinh viên tích lũy tối thiểu 120 tín chỉ và duy trì GPA trên 2.0 để tốt nghiệp.",
-                "thought": "Câu hỏi chung về quy chế học vụ, trả lời trực tiếp không cần gọi Tool."
+                "content": "[Mock Agent Response]: Xe điện VinFast áp dụng chính sách bảo hành chính hãng lên đến 10 năm hoặc 200.000 km (tùy điều kiện nào đến trước) cho xe và pin cao áp. Chu kỳ bảo dưỡng định kỳ tiêu chuẩn là mỗi 12.000 km hoặc 12 tháng.",
+                "thought": "Câu hỏi chung về chính sách bảo dưỡng/bảo hành xe điện VinFast, trả lời trực tiếp không cần gọi Tool."
             }
+
 
 
 class GeminiProvider(BaseLLMProvider):

@@ -1,0 +1,37 @@
+[
+  {
+    "id": "TC01",
+    "type": "direct_query",
+    "question": "Chào bạn, bạn có thể cho tôi biết chính sách bảo hành pin và chu kỳ bảo dưỡng định kỳ tiêu chuẩn của xe điện VinFast không?",
+    "expected_behavior": "Chatbot trả lời trực tiếp từ System Prompt/kiến thức chung về xe điện VinFast, không cần gọi bất kỳ Tool nào.",
+    "complexity": "Low"
+  },
+  {
+    "id": "TC02",
+    "type": "single_tool_query",
+    "question": "Hãy tra cứu thông tin vận hành và lịch sử bảo dưỡng của xe VinFast có số VIN VF8-VN202601.",
+    "expected_behavior": "Agent nhận diện nhu cầu tra cứu xe, tự động phát sinh Tool Call 'vehicle_query' với số VIN VF8-VN202601.",
+    "complexity": "Medium"
+  },
+  {
+    "id": "TC03",
+    "type": "appointment_booking",
+    "question": "Hãy đặt lịch bảo dưỡng định kỳ cho xe VinFast có số VIN VF8-VN202601 tại Xưởng dịch vụ VinFast Smart City vào lúc 09:00 ngày 20/09/2026.",
+    "expected_behavior": "Agent tự động phát sinh Tool Call 'schedule_service' với đúng số VIN, xưởng dịch vụ và thời gian hẹn.",
+    "complexity": "Medium"
+  },
+  {
+    "id": "TC04",
+    "type": "multi_step_reasoning",
+    "question": "Xe của tôi có số VIN VF8-VN202601. Hãy kiểm tra tình trạng số km (ODO) và các cảnh báo lỗi hiện tại của xe, sau đó đặt lịch hẹn bảo dưỡng phù hợp tại Xưởng dịch vụ VinFast Ocean Park vào lúc 14:30 ngày 22/09/2026.",
+    "expected_behavior": "Agent thực hiện chuỗi suy luận ReAct đa bước: Tra cứu tình trạng ODO và lỗi xe qua 'vehicle_query' trước, sau đó tiến hành đặt lịch dịch vụ qua 'schedule_service'.",
+    "complexity": "High"
+  },
+  {
+    "id": "TC05",
+    "type": "edge_case_handling",
+    "question": "Hãy tra cứu thông tin bảo dưỡng và tình trạng pin của xe VinFast có số VIN không tồn tại VIN99999999.",
+    "expected_behavior": "Agent nhận kết quả NOT_FOUND từ Tool và đưa ra phản hồi lịch sự, chính xác rằng không tìm thấy xe trong hệ thống, không bịa đặt dữ liệu.",
+    "complexity": "Medium"
+  }
+]

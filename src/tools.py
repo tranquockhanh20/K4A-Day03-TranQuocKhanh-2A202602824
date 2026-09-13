@@ -13,17 +13,17 @@ from typing import Dict, Any
 TOOLS_SCHEMA = [
     # Tool 1: Đã được định nghĩa mẫu sẵn cho Học viên tham khảo
     {
-        "name": "academic_query",
-        "description": "Tra cứu hồ sơ và thông tin học vụ của sinh viên VinUni bằng mã sinh viên.",
+        "name": "vehicle_query",
+        "description": "Tra cứu hồ sơ xe, số km đã đi (ODO), tình trạng pin (SoH), cảnh báo lỗi và lịch sử bảo dưỡng bằng số VIN.",
         "parameters": {
             "type": "object",
             "properties": {
-                "student_id": {
+                "vin": {
                     "type": "string",
-                    "description": "Mã sinh viên cần tra cứu (ví dụ: 'SV2026001')"
+                    "description": "Số khung xe (VIN) cần tra cứu (ví dụ: 'VF8-VN202601')"
                 }
             },
-            "required": ["student_id"]
+            "required": ["vin"]
         }
     },
     
@@ -38,14 +38,29 @@ TOOLS_SCHEMA = [
     # 3. Khai báo danh sách các trường bắt buộc (required).
     # --------------------------------------------------------------------------
     {
-        "name": "schedule_appointment",
-        "description": "Đặt lịch hẹn tư vấn học vụ với Cố vấn học tập VinUni.",
+         "name": "schedule_service",
+        "description": "Đặt lịch hẹn bảo dưỡng hoặc sửa chữa xe điện tại các Xưởng dịch vụ VinFast.",
         "parameters": {
             "type": "object",
             "properties": {
-                # TODO 1.2: Khai báo các thuộc tính tham số cho Tool tại đây...
+                "vin": {
+                    "type": "string",
+                    "description": "Số khung xe (VIN) cần đặt lịch (ví dụ: 'VF8-VN202601')"
+                },
+                "service_center": {
+                    "type": "string",
+                    "description": "Tên Xưởng dịch vụ VinFast (ví dụ: 'VinFast Smart City', 'VinFast Ocean Park')"
+                },
+                "datetime_str": {
+                    "type": "string",
+                    "description": "Thời gian hẹn dịch vụ (ví dụ: '09:00 20/09/2026')"
+                },
+                "service_type": {
+                    "type": "string",
+                    "description": "Loại dịch vụ yêu cầu (ví dụ: 'Bảo dưỡng định kỳ', 'Kiểm tra pin', 'Sửa chữa cảnh báo lỗi')"
+                }
             },
-            "required": [] # TODO 1.2: Khai báo danh sách các trường bắt buộc tại đây...
+            "required": ["vin", "service_center", "datetime_str"]
         }
     }
 ]
@@ -55,57 +70,60 @@ TOOLS_SCHEMA = [
 # ==============================================================================
 
 MOCK_DATABASE = {
-    "SV2026001": {
-        "full_name": "Nguyễn Văn An",
-        "class": "AI-K4",
-        "gpa": 3.85,
-        "email": "an.nv@vinuni.edu.vn",
-        "status": "Đang học",
-        "advisor": "PGS.TS Nguyễn Văn A"
+    "VF8-VN202601": {
+        "model": "VinFast VF8 Plus",
+        "owner": "Trần Van Bình",
+        "plate_number": "30K-882.49",
+        "odo_km": 12500,
+        "battery_soh": "96%",
+        "warning_lights": "Không có cảnh báo lỗi (Hệ thống bình thường)",
+        "maintenance_status": "Đã đến hạn bảo dưỡng cấp 1 (mốc 12.000 km)",
+        "preferred_service_center": "VinFast Smart City"
     },
-    "SV2026002": {
-        "full_name": "Trần Thị Bình",
-        "class": "AI-K4",
-        "gpa": 3.60,
-        "email": "binh.tt@vinuni.edu.vn",
-        "status": "Đang học",
-        "advisor": "TS. Lê Thị B"
+    "VF9-VN202602": {
+        "model": "VinFast VF9 Eco",
+        "owner": "Nguyễn Văn An",
+        "plate_number": "30L-123.45",
+        "odo_km": 24200,
+        "battery_soh": "94%",
+        "warning_lights": "Cảnh báo áp suất lốp trước bên phải (TPMS)",
+        "maintenance_status": "Đã đến hạn bảo dưỡng cấp 2 (mốc 24.000 km)",
+        "preferred_service_center": "VinFast Ocean Park"
     }
 }
 
 
-def execute_academic_query(student_id: str) -> str:
-    """Thực thi tra cứu học vụ theo mã sinh viên"""
-    student = MOCK_DATABASE.get(student_id.strip().upper())
-    if student:
+def execute_vehicle_query(vin: str) -> str:
+    """Thực thi tra cứu thông tin xe điện theo số VIN"""
+    vehicle = MOCK_DATABASE.get(vin.strip().upper())
+    if vehicle:
         return json.dumps({
             "status": "SUCCESS",
-            "student_id": student_id,
-            "data": student
+            "vin": vin,
+            "data": vehicle
         }, ensure_ascii=False)
     else:
         return json.dumps({
             "status": "NOT_FOUND",
-            "message": f"Không tìm thấy dữ liệu sinh viên có mã '{student_id}'"
+            "message": f"Không tìm thấy dữ liệu xe có số VIN '{vin}' trong hệ thống VinFast."
         }, ensure_ascii=False)
-
-
-def execute_schedule_appointment(student_id: str, datetime_str: str, advisor_name: str = "PGS.TS Nguyễn Văn A") -> str:
-    """Thực thi đặt lịch hẹn tư vấn học vụ"""
+def execute_schedule_service(vin: str, service_center: str, datetime_str: str, service_type: str = "Bảo dưỡng định kỳ") -> str:
+    """Thực thi đặt lịch bảo dưỡng xe điện"""
     return json.dumps({
         "status": "SUCCESS",
-        "booking_id": f"BK-{student_id}-99",
-        "student_id": student_id,
+        "booking_id": f"BK-VF-{vin}-2026",
+        "vin": vin,
+        "service_center": service_center,
         "datetime": datetime_str,
-        "advisor": advisor_name,
-        "message": f"Đặt lịch thành công cho sinh viên {student_id} với {advisor_name} vào lúc {datetime_str}."
+        "service_type": service_type,
+        "message": f"Đặt lịch thành công cho xe {vin} ({service_type}) tại {service_center} vào lúc {datetime_str}."
     }, ensure_ascii=False)
 
 
 # Router gọi tool thực tế
 TOOL_ROUTER = {
-    "academic_query": execute_academic_query,
-    "schedule_appointment": execute_schedule_appointment
+    "vehicle_query": execute_vehicle_query,
+    "schedule_service": execute_schedule_service
 }
 
 def dispatch_tool_call(tool_name: str, arguments: Dict[str, Any]) -> str:
